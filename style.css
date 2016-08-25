@@ -1,0 +1,20 @@
+body{
+	height: 100vh;
+	width: 100vw;
+}
+
+#game_container{
+	height: 100%;
+	width: 100%;
+	position: relative;
+}
+.ship_class{
+	background-image: url(http://3.bp.blogspot.com/-jGC08Dy0zg8/U405cNq1-MI/AAAAAAAABqU/38d5rmV1S8Y/s1600/redfighter0006.png);
+	height: 10vh;
+	width: 10vh;
+	background-size:contain;
+	background-position: center;
+	background-repeat: no-repeat;
+	position: absolute;
+	transition-duration: .15s;
+}
