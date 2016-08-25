@@ -15,6 +15,7 @@ var ship_constructor = function(parent){
 	this.mid_width;
 	this.height;
 	this.mid_height;
+	this.vectors = {x: 0, y: 0};
 	this.vector_angle = 0;
 	this.ship_angle = 0;
 	this.offset_angle = 270;
@@ -86,7 +87,6 @@ var ship_constructor = function(parent){
 	}
 	this.get_radians = function(degrees){
 		return (Math.PI/180) * degrees;
-
 	}
 	this.move_ship = function(){
 		var temp_angle = this.vector_angle + this.offset_angle;
