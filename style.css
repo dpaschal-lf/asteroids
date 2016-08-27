@@ -16,5 +16,5 @@ body{
 	background-position: center;
 	background-repeat: no-repeat;
 	position: absolute;
-	transition-duration: .15s;
+	#transition-duration: .15s;
 }

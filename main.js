@@ -18,9 +18,9 @@ var ship_constructor = function(parent){
 	this.vectors = {x: 0, y: 0};
 	this.vector_angle = 0;
 	this.ship_angle = 0;
-	this.offset_angle = 270;
+	this.offset_angle = 0;
 	this.turn_speed = 15;
-	this.engine_power = 10;
+	this.engine_power = 2;
 	this.max_speed = 30;
 	this.thrust_on = false;
 	this.heartbeat_interval = 50;
@@ -75,11 +75,11 @@ var ship_constructor = function(parent){
 	}
 	this.perform_turn = function(){
 		if(this.turn_direction != 0){
-			var new_angle = this.vector_angle+(this.turn_speed*this.turn_direction);
+			var new_angle = this.ship_angle+(this.turn_speed*this.turn_direction);
 			this.dom_element.css({
 				'transform' : 'rotateZ('+new_angle+'deg)'
 			});
-			this.vector_angle = new_angle;
+			this.ship_angle = new_angle;
 		}
 	}
 	this.stop_turn = function(){
@@ -88,14 +88,17 @@ var ship_constructor = function(parent){
 	this.get_radians = function(degrees){
 		return (Math.PI/180) * degrees;
 	}
+	this.change_vector = function(){
+		this.vectors.x -= Math.cos(this.get_radians(this.ship_angle+this.offset_angle)) * this.engine_power;
+		this.vectors.y += Math.sin(this.get_radians(this.ship_angle+this.offset_angle)) * this.engine_power;
+	}
 	this.move_ship = function(){
-		var temp_angle = this.vector_angle + this.offset_angle;
-		var delta_x = Math.cos(this.get_radians(temp_angle)) * this.thrust_value;
-		var delta_y = Math.sin(this.get_radians(temp_angle)) * this.thrust_value;
+
 		this.dom_element.css({
-			top : '+='+delta_y+'px',
-			left : '+='+delta_x+'px'
-		})		
+			top : '+='+this.vectors.x+'px',
+			left : '+='+this.vectors.y+'px'
+		});
+		this.parent.ship_move_handler(this);	
 	}
 	this.thrust = function(){
 		this.thrust_on =true;
@@ -106,9 +109,9 @@ var ship_constructor = function(parent){
 	}
 	this.add_thrust = function(){
 		if(this.thrust_value + this.engine_power > this.max_speed){
-			this.thrust_value = this.max_speed;
+			this.change_vector();
 		} else{
-			this.thrust_value += this.engine_power;
+			this.change_vector();
 		}
 	}
 	this.start_heartbeat = function(){
@@ -135,11 +138,36 @@ var ship_constructor = function(parent){
 		if(this.thrust_on){
 			this.add_thrust();
 		} else {
-			this.thrust_reduce();
+			//this.thrust_reduce();
 		}
 		this.perform_turn();
 		this.move_ship();
 		
+	}
+	this.wrap_check = function(){
+
+	}
+	this.get_position = function(){
+		return this.dom_element.position();
+	}
+	this.get_size = function(){
+		var output = {
+			width: this.width,
+			height: this.height,
+			mid_width: this.mid_width,
+			mid_height: this.mid_height
+		};
+		return output;	
+	}
+	this.get_bounds = function(){
+		var position = this.dom_element.position();
+		var bounds = {
+			left: position.left,
+			top: position.top,
+			bottom: position.top + this.height,
+			right: position.left + this.width
+		}
+		return bounds;
 	}
 }
 
@@ -238,6 +266,64 @@ var game_controller = function(){
 		$('body').on('keypress',this.handle_keypress.bind(this));
 		$('body').on('keyup',this.handle_keyup.bind(this));
 		//$('body').on('keypress',this.handle_keypress); //standard way
+	}
+	this.ship_move_handler = function(ship){
+		// var ship_pos = ship.get_position();
+		// var ship_size = ship.get_size();
+		// var bounds = {
+		// 	left: 0 - ship_size.width,
+		// 	top: 0 - ship_size.height,
+		// 	bottom: this.height+ship_size.height,
+		// 	right: this.width + ship_size.width
+		// }
+		if(!this.check_for_collision(this,ship)){
+			this.edge_warp_ship(ship);
+		}
+	}
+	this.edge_warp_ship = function(ship){
+		var ship_bounds = ship.get_bounds();
+		var my_bounds = this.get_bounds();
+		var ship_position = ship.get_position();
+		var new_x=ship_position.left;
+		var new_y=ship_position.top;
+		if(ship_bounds.right < my_bounds.left){
+			new_x = my_bounds.right;
+		} else if(ship_bounds.left > my_bounds.right){
+			new_x = 0;
+		}
+		if(ship_bounds.bottom < my_bounds.top){
+			new_y = my_bounds.bottom;
+		} else if(ship_bounds.top > my_bounds.bottom){
+			new_y = 0;
+		}
+		ship.set_position({x:new_x,y:new_y});
+	}
+	this.check_for_collision = function(element1, element2){
+
+		var e1_bounds = element1.get_bounds();		
+		var e2_bounds = element2.get_bounds();		
+		if(
+			e1_bounds.right < e2_bounds.left 
+						   ||
+			e1_bounds.left > e2_bounds.right 
+			               ||
+			e1_bounds.top > e2_bounds.bottom 
+			               ||
+			e1_bounds.bottom < e2_bounds.top
+		){
+			return false
+		}
+		return true;
+	}
+	this.get_bounds = function(){
+		var position = this.game_area.position();
+		var bounds = {
+			left: position.left,
+			top: position.top,
+			bottom: position.left + this.height,
+			right: position.top + this.width
+		}
+		return bounds;
 	}
 }
 
