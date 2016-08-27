@@ -19,11 +19,11 @@ var ship_constructor = function(parent){
 	this.vector_angle = 0;
 	this.ship_angle = 0;
 	this.offset_angle = 0;
-	this.turn_speed = 15;
-	this.engine_power = 2;
+	this.turn_speed = 5;
+	this.engine_power = .5;
 	this.max_speed = 30;
 	this.thrust_on = false;
-	this.heartbeat_interval = 50;
+	this.heartbeat_interval = 15;
 	this.thrust_value = 0;
 	this.thrust_bleed = 2;
 	this.turn_direction = 0;
@@ -104,7 +104,6 @@ var ship_constructor = function(parent){
 		this.thrust_on =true;
 	}
 	this.stop_thrust = function(){
-		console.log('thrust stopped');
 		this.thrust_on = false;
 	}
 	this.add_thrust = function(){
