@@ -16,6 +16,11 @@ var ship_constructor = function(parent){
 	this.height;
 	this.mid_height;
 	this.vectors = {x: 0, y: 0};
+	this.stats_per_second = {
+		turn_speed : 200,
+		engine_power : 10,
+		thrust_bleed : 3
+	}
 	this.vector_angle = 0;
 	this.ship_angle = 0;
 	this.offset_angle = 0;
@@ -23,7 +28,7 @@ var ship_constructor = function(parent){
 	this.engine_power = .5;
 	this.max_speed = 30;
 	this.thrust_on = false;
-	this.heartbeat_interval = 15;
+	this.heartbeat_interval = 50;
 	this.thrust_value = 0;
 	this.thrust_bleed = 2;
 	this.turn_direction = 0;
@@ -31,8 +36,15 @@ var ship_constructor = function(parent){
 	this.init = function(){
 		var dom_element = this.create_dom_element();
 		this.get_dom_size();
+		this.update_stats_to_heartbeat();
 		this.start_heartbeat();
 		return dom_element;
+	}
+	this.update_stats_to_heartbeat = function(){
+		var intervals = 1000 / this.heartbeat_interval;
+		for(var i in this.stats_per_second){
+			this[i] = this.stats_per_second[i]/intervals;
+		}
 	}
 	this.create_dom_element = function(){
 		this.dom_element = $("<div>",
