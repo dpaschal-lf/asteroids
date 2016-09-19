@@ -4,11 +4,38 @@
 	<title>JS Asteroids</title>
 	<link href="style.css" rel="stylesheet">
 	<script src="assets/js/jquery2.1.4.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.3.2/firebase.js"></script>
+<!-- 	<script>
+	  // Initialize Firebase
+	  var config = {
+	    apiKey: "AIzaSyAVWFli74jxx7YY6nDI7M_fLiF-fos8CNk",
+	    authDomain: "multi-ttt.firebaseapp.com",
+	    databaseURL: "https://multi-ttt.firebaseio.com",
+	    storageBucket: "multi-ttt.appspot.com",
+	    messagingSenderId: "469120619770"
+	  };
+	  firebase.initializeApp(config);
+	  var game_state = null
+	  var db = firebase.database().ref('/current_games/32523234/');
+	  firebase.database().ref('/current_games/32523234/').once('value').then(function(snapshot) {
+  			console.log(snapshot.val());
+  			game = snapshot.val();
+	  });
+	  db.on('value', function(snapshot) {
+  			//updateStarCount(postElement, snapshot.val());
+  			console.log("update!",snapshot.val());
+  			game=snapshot.val();
+	  });
+
+	</script> -->
 	<script src="main.js"></script>
+	<script src="communicate.js"></script>
+	<script src='https://code.responsivevoice.org/responsivevoice.js'></script>
 </head>
 <body>
 	<div id="game_container">
 		<!-- <div id="ship" class="ship_class"></div> -->
 	</div>
+	<input onclick='responsiveVoice.speak("Shiba ee news are my personal god and savior");' type='button' value='🔊 Play' />
 </body>
 </html>
