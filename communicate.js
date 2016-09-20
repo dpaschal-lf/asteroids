@@ -37,7 +37,7 @@
 	       	  }
 
               var received_msg = evt.data;
-              console.log('message is received',evt);
+              //console.log('message is received',evt);
               var packet = JSON.parse(evt.data);
               var html = null;
               var refresh = false;

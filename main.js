@@ -323,23 +323,23 @@ var game_controller = function(){
 		var player_id = message_packet.author;
 		var our_name = _this.player_mobile.get_name();
 		if(our_name === message_packet.author){
-			console.log('received our own message... ignoring');
+			//console.log('received our own message... ignoring');
 			return;
 		} else {
-			console.log('received message ',message_packet);
+			//console.log('received message ',message_packet);
 		}
 
 		if(message_packet.text !== 'join' && _this.remote_player_mobiles[player_id] === undefined){
-			console.log('invalid player '+player_id);
+			//console.log('invalid player '+player_id);
 			return;
 		}
 		var ship = _this.remote_player_mobiles[player_id];
-		console.log('sending command to ',ship);
+		//console.log('sending command to ',ship);
 		//TODO: call the normal handlers instead of a separate set
 		switch(message_packet.text){
 			case 'join':
 				var new_ship = _this.make_ship(false);
-				console.log('HERE*********');
+				//console.log('HERE*********');
 				new_ship.set_name(message_packet.author);
 				_this.add_player(message_packet.author, new_ship);
 				break;
