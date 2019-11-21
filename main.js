@@ -114,9 +114,11 @@ var ship_constructor = function(parent){
 	}
 	this.thrust = function(){
 		this.thrust_on =true;
+		this.dom_element.addClass('thrusting');
 	}
 	this.stop_thrust = function(){
 		this.thrust_on = false;
+		this.dom_element.removeClass('thrusting');
 	}
 	this.add_thrust = function(){
 		if(this.thrust_value + this.engine_power > this.max_speed){
